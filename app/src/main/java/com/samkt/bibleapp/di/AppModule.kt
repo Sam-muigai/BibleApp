@@ -1,6 +1,7 @@
 package com.samkt.bibleapp.di
 
 import com.samkt.bibleapp.feature_bible.data.BibleApi
+import com.samkt.bibleapp.feature_bible.data.DailyVerseApi
 import com.samkt.bibleapp.feature_bible.data.repository.BibleRepositoryImpl
 import com.samkt.bibleapp.feature_bible.domain.repository.BibleRepository
 import dagger.Module
@@ -39,11 +40,23 @@ object AppModule {
             .build()
             .create(BibleApi::class.java)
     }
+    @Provides
+    @Singleton
+    fun provideDailyVerseApi(): DailyVerseApi {
+        return Retrofit
+            .Builder()
+            .baseUrl(DailyVerseApi.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClientFactory())
+            .build()
+            .create(DailyVerseApi::class.java)
+    }
+
 
     @Provides
     @Singleton
-    fun provideRepository(api: BibleApi):BibleRepository{
-        return BibleRepositoryImpl(api)
+    fun provideRepository(api: BibleApi,dailyVerseApi: DailyVerseApi):BibleRepository{
+        return BibleRepositoryImpl(api = api,dailyVerseApi = dailyVerseApi)
     }
 
 }

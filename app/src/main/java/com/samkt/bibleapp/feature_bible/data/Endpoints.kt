@@ -7,4 +7,6 @@ object Endpoints{
     const val CHAPTERS = "/v1/bibles/{bibleId}/books/{bookId}/chapters"
 
     const val VERSES = "v1/bibles/{bibleId}/chapters/{chapterId}"
+
+    const val DAILY_VERSE = "/api/v1/get?format=json&order=daily"
 }
