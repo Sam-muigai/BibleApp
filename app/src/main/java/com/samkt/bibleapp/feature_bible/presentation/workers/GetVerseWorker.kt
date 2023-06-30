@@ -1,31 +1,45 @@
 package com.samkt.bibleapp.feature_bible.presentation.workers
 
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import androidx.work.CoroutineWorker
+import androidx.work.Data
+import androidx.work.WorkContinuation
 import androidx.work.WorkerParameters
-import com.samkt.bibleapp.MainActivity
+import androidx.work.workDataOf
+import com.samkt.bibleapp.feature_bible.domain.repository.BibleRepository
 import com.samkt.bibleapp.feature_bible.presentation.services.GreetingNotification
+import com.samkt.bibleapp.feature_bible.util.Resources
 import kotlinx.coroutines.delay
 import java.lang.Exception
+import javax.inject.Inject
 
-class GreetingWorker(appContext: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(appContext, workerParams) {
+const val VERSE = "verse"
+const val REFERENCE = "reference"
+
+
+class GetVerseWorker @Inject constructor(
+    appContext: Context,
+    workerParams: WorkerParameters
+) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         val verse = inputData.getString(VERSE) ?: "No verse today"
         val reference = inputData.getString(REFERENCE) ?: "No verse today"
+
         val notification by lazy {
             GreetingNotification(
                 context = applicationContext,
-                reference = reference,
-                verse = verse
+                verse = verse,
+                reference = reference
             )
         }
         return try {
+
             notification.createNotification()
-            delay(1000)
+
+            delay(3000)
+
             notification.showNotification()
+
             Result.success()
         } catch (e: Exception) {
             Result.failure()

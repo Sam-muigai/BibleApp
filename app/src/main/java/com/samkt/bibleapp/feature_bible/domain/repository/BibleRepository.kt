@@ -12,7 +12,7 @@ typealias BookResponse = Flow<Resources<List<BookDataDto>>>
 
 typealias ChapterResponse = Flow<Resources<List<ChapterDataDto>>>
 
-typealias DailyVerseResponse = Flow<Resources<Details>>
+
 interface BibleRepository{
 
     fun getAllBooks(): BookResponse
@@ -21,5 +21,8 @@ interface BibleRepository{
 
     suspend fun getVerse(chapterId:String):VerseDto
 
-    fun getDailyVerse():DailyVerseResponse
+
+    suspend fun getVerseReminder()
+
+
 }

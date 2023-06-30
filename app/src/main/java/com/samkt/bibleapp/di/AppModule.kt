@@ -1,5 +1,6 @@
 package com.samkt.bibleapp.di
 
+import android.content.Context
 import com.samkt.bibleapp.feature_bible.data.BibleApi
 import com.samkt.bibleapp.feature_bible.data.DailyVerseApi
 import com.samkt.bibleapp.feature_bible.data.repository.BibleRepositoryImpl
@@ -7,6 +8,7 @@ import com.samkt.bibleapp.feature_bible.domain.repository.BibleRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -55,8 +57,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(api: BibleApi,dailyVerseApi: DailyVerseApi):BibleRepository{
-        return BibleRepositoryImpl(api = api,dailyVerseApi = dailyVerseApi)
+    fun provideRepository(api: BibleApi,dailyVerseApi: DailyVerseApi,@ApplicationContext context:Context):BibleRepository{
+        return BibleRepositoryImpl(api = api,dailyVerseApi = dailyVerseApi,context)
     }
 
 }
