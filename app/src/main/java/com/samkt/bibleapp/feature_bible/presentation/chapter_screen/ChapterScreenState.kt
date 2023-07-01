@@ -6,5 +6,4 @@ data class ChapterScreenState(
     val data:List<ChapterDataDto> = emptyList(),
     val loading:Boolean = false,
     val errorMessage:String? = null
-
 )

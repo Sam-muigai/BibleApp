@@ -55,5 +55,4 @@ class ChapterScreenViewModel @Inject constructor(
         } ?: run { _state.value = ChapterScreenState(errorMessage = "null id") }
     }
 
-
 }

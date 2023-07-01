@@ -68,7 +68,6 @@ fun BookScreenContent(
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(strokeWidth = 1.dp, color = Color.Red)
-
             }
         }
         Column(

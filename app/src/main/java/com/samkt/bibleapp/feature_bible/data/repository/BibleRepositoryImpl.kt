@@ -18,6 +18,7 @@ import com.samkt.bibleapp.feature_bible.data.dto.verses.VerseDto
 import com.samkt.bibleapp.feature_bible.domain.repository.BibleRepository
 import com.samkt.bibleapp.feature_bible.domain.repository.BookResponse
 import com.samkt.bibleapp.feature_bible.domain.repository.ChapterResponse
+import com.samkt.bibleapp.feature_bible.domain.repository.VersesResponse
 import com.samkt.bibleapp.feature_bible.presentation.workers.GetVerseWorker
 import com.samkt.bibleapp.feature_bible.presentation.workers.GreetingWorker
 import com.samkt.bibleapp.feature_bible.presentation.workers.REFERENCE
@@ -60,10 +61,6 @@ class BibleRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getVerse(chapterId: String): VerseDto {
-        TODO("Not yet implemented")
-    }
-
 
     override suspend fun getVerseReminder() {
         val workManager by lazy {
@@ -93,7 +90,17 @@ class BibleRepositoryImpl @Inject constructor(
             ExistingPeriodicWorkPolicy.KEEP,
             getPeriodicVerseWorker
         )
+    }
 
-
+    override fun getVerses(chapterId: String): VersesResponse = flow {
+        emit(Resources.Loading)
+        try {
+            val verse = api.getAllVerses(chapterId = chapterId).data
+            emit(Resources.Success(verse))
+        }catch (e:IOException){
+            emit(Resources.Error("No internet connection"))
+        }catch (e:Exception){
+            emit(Resources.Error(e.localizedMessage ?: "Unknown error occurred try again later."))
+        }
     }
 }
