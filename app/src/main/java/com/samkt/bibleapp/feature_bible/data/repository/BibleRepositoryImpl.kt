@@ -81,29 +81,18 @@ class BibleRepositoryImpl @Inject constructor(
             .putString(REFERENCE, referenceFromApi)
             .build()
 
-        val getVerseWorker = OneTimeWorkRequestBuilder<GetVerseWorker>()
+
+        val getPeriodicVerseWorker = PeriodicWorkRequestBuilder<GetVerseWorker>(1, TimeUnit.HOURS)
             .setInputData(data)
             .setConstraints(constraints)
             .addTag("getVerseWork")
             .build()
 
-        workManager.enqueueUniqueWork(
-            "get_verse_work",
-            ExistingWorkPolicy.KEEP,
-            getVerseWorker
+        workManager.enqueueUniquePeriodicWork(
+            "get_verses_work",
+            ExistingPeriodicWorkPolicy.KEEP,
+            getPeriodicVerseWorker
         )
-
-//        val getPeriodicVerseWorker = PeriodicWorkRequestBuilder<GetVerseWorker>(15, TimeUnit.SECONDS)
-//            .setInputData(data)
-//            .setConstraints(constraints)
-//            .addTag("getVerseWork")
-//            .build()
-
-//        workManager.enqueueUniquePeriodicWork(
-//            "get_verses_work",
-//            ExistingPeriodicWorkPolicy.KEEP,
-//            getPeriodicVerseWorker
-//        )
 
 
     }

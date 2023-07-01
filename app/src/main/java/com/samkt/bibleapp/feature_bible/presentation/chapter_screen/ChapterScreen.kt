@@ -1,19 +1,20 @@
-package com.samkt.bibleapp.feature_bible.presentation.book_screen
+package com.samkt.bibleapp.feature_bible.presentation.chapter_screen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -29,74 +30,66 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-
 @Composable
-fun BookScreen(
-    viewModel: BookScreenViewModel = hiltViewModel(),
-    onClick: (String, String) -> Unit
-) {
-    val state = viewModel.screenState.collectAsState().value
-    BookScreenContent(state = state, onClick = onClick)
+fun ChapterScreen(viewModel: ChapterScreenViewModel = hiltViewModel(), book: String) {
+    val screenState = viewModel.state.collectAsState().value
+    ChapterScreenContent(state = screenState, book = book)
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookScreenContent(
-    state: BookScreenState,
-    onClick: (String, String) -> Unit
+fun ChapterScreenContent(
+    modifier: Modifier = Modifier,
+    state: ChapterScreenState,
+    book: String
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+    Scaffold(modifier = modifier) { paddingValues ->
         AnimatedVisibility(
             visible = state.loading,
-            enter = fadeIn(
-                initialAlpha = 1f,
-                animationSpec = tween(2000)
-            ),
-            exit = fadeOut(
-                targetAlpha = 1f,
-                animationSpec = tween(2000)
-            )
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(strokeWidth = 1.dp, color = Color.Red)
-
             }
         }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            state.errorMessage?.let {
-                Text(text = it)
-            }
+            Spacer(modifier = Modifier.height(0.dp))
+            Text(
+                text = book,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
             LazyVerticalGrid(
-                contentPadding = PaddingValues(4.dp),
-                columns = GridCells.Fixed(2),
+                modifier = Modifier.padding(paddingValues),
+                contentPadding = PaddingValues(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                columns = GridCells.Fixed(5),
                 content = {
                     items(state.data) {
                         Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                                .clickable {
-                                    onClick.invoke(it.id, it.name)
-                                },
+                            modifier = Modifier.height(50.dp),
                             shape = RoundedCornerShape(8.dp)
                         ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(text = it.name, style = MaterialTheme.typography.titleMedium)
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = it.number, style = MaterialTheme.typography.titleLarge)
                             }
                         }
                     }
@@ -105,19 +98,3 @@ fun BookScreenContent(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
