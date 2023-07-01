@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     val navController = rememberNavController()
-    val viewModel = hiltViewModel<BookScreenViewModel>()
+    val viewModel = hiltViewModel<MainViewModel>()
     LaunchedEffect(
         key1 = Unit,
         block = {

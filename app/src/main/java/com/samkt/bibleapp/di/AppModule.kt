@@ -4,7 +4,9 @@ import android.content.Context
 import com.samkt.bibleapp.feature_bible.data.BibleApi
 import com.samkt.bibleapp.feature_bible.data.DailyVerseApi
 import com.samkt.bibleapp.feature_bible.data.repository.BibleRepositoryImpl
+import com.samkt.bibleapp.feature_bible.data.repository.DailyVerseRepositoryImpl
 import com.samkt.bibleapp.feature_bible.domain.repository.BibleRepository
+import com.samkt.bibleapp.feature_bible.domain.repository.DailyVerseRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,6 +56,11 @@ object AppModule {
             .create(DailyVerseApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideDailyVerseRepository(@ApplicationContext context: Context,dailyVerseApi: DailyVerseApi):DailyVerseRepository{
+        return DailyVerseRepositoryImpl(context,dailyVerseApi)
+    }
 
     @Provides
     @Singleton

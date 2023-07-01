@@ -62,35 +62,7 @@ class BibleRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getVerseReminder() {
-        val workManager by lazy {
-            WorkManager.getInstance(context)
-        }
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
 
-        val verseFromApi = dailyVerseApi.getDailyVerse().verse.details.text
-        val referenceFromApi = dailyVerseApi.getDailyVerse().verse.details.reference
-
-        val data = Data.Builder()
-            .putString(VERSE, verseFromApi)
-            .putString(REFERENCE, referenceFromApi)
-            .build()
-
-
-        val getPeriodicVerseWorker = PeriodicWorkRequestBuilder<GetVerseWorker>(1, TimeUnit.HOURS)
-            .setInputData(data)
-            .setConstraints(constraints)
-            .addTag("getVerseWork")
-            .build()
-
-        workManager.enqueueUniquePeriodicWork(
-            "get_verses_work",
-            ExistingPeriodicWorkPolicy.KEEP,
-            getPeriodicVerseWorker
-        )
-    }
 
     override fun getVerses(chapterId: String): VersesResponse = flow {
         emit(Resources.Loading)

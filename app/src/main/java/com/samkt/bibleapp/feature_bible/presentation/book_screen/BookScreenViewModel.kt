@@ -28,15 +28,6 @@ class BookScreenViewModel @Inject constructor(
 
     }
 
-
-    fun getTodayVerse() {
-        viewModelScope.launch {
-            delay(3000)
-            repository.getVerseReminder()
-        }
-    }
-
-
     private fun getAllBooks() {
         viewModelScope.launch {
             repository.getAllBooks().onEach {

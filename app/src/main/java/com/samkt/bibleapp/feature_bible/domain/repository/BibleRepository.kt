@@ -22,7 +22,6 @@ interface BibleRepository{
 
     fun getAllChapters(bookId:String): ChapterResponse
 
-    suspend fun getVerseReminder()
 
     fun getVerses(chapterId:String):VersesResponse
 
